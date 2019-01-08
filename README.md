@@ -1,6 +1,7 @@
 > `woann-chat`是一个基于laravelS和layim编写的聊天系统。
 
 项目地址：[https://github.com/woann/chat](https://github.com/woann/chat)
+
 | 依赖 | 说明 |
 | -------- | -------- |
 | [PHP](https://secure.php.net/manual/zh/install.php) | `>= 7.2` `推荐7.2` |
