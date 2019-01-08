@@ -1,0 +1,61 @@
+{
+  "name": "hhxsv5/laravel-s",
+  "type": "library",
+  "license": "MIT",
+  "support": {
+    "issues": "https://github.com/hhxsv5/laravel-s/issues",
+    "source": "https://github.com/hhxsv5/laravel-s"
+  },
+  "description": "🚀LaravelS is a glue that is used to quickly integrate Swoole into Laravel or Lumen and then give them better performance and more possibilities.",
+  "keywords": [
+    "laravel-s",
+    "swoole",
+    "laravel",
+    "lumen",
+    "async",
+    "coroutine",
+    "server",
+    "http",
+    "websocket",
+    "tcp",
+    "udp",
+    "process",
+    "task",
+    "timer",
+    "inotify",
+    "performance"
+  ],
+  "homepage": "https://github.com/hhxsv5/laravel-s",
+  "authors": [
+    {
+      "name": "Xie Biao",
+      "email": "hhxsv5@sina.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.5.9",
+    "symfony/console": ">=2.7.0",
+    "ext-json": "*"
+  },
+  "suggest": {
+    "ext-swoole": "Event-driven asynchronous & concurrent & coroutine networking engine with high performance for PHP, require >= 1.7.19.",
+    "ext-inotify": "Inotify, used to reload all worker processes when your code is modified."
+  },
+  "autoload": {
+    "psr-4": {
+      "Hhxsv5\\LaravelS\\": "src"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Hhxsv5\\LaravelS\\Illuminate\\LaravelSServiceProvider"
+      ]
+    }
+  },
+  "bin": [
+    "bin/fswatch"
+  ],
+  "prefer-stable": true,
+  "minimum-stability": "dev"
+}
