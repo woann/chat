@@ -20,6 +20,12 @@
 * 运行laravelS `php bin/laravels start`
 * 此时访问`127.0.0.1:9501`即可进入登录页面
 * 测试账号 默认账号:`woann`,密码:`wqg951122`,其他测试账号：`test01` - `test04` 密码全是`123456`，当然你也可以自行注册。
+
+## 待完成
+* 聊天记录
+* 离线消息
+* ...
+
 ## 部分截图
 * 主界面
 ![image.png](https://upload-images.jianshu.io/upload_images/9160823-0a98529381fb35be.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
