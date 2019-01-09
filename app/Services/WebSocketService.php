@@ -173,6 +173,7 @@ class WebSocketService implements WebSocketHandlerInterface
                 break;
             //追加好友到好友列表
             case "addList":
+                var_dump($info);
                 $user = DB::table('user')->find($session->user_id);
                 $data = [
                     "type" => "addList",

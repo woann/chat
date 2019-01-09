@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>消息盒子</title>
     <link rel="stylesheet" href="/asset/layuiv2/css/layui.css" media="all">
+    <link rel="stylesheet" href="/asset/bootstrap-3.3.7/css/bootstrap.css">
     <style>
         .layim-msgbox{margin: 15px;}
         .layim-msgbox li{position: relative; margin-bottom: 10px; padding: 0 130px 10px 60px; padding-bottom: 10px; line-height: 22px; border-bottom: 1px dotted #e2e2e2;}
@@ -51,11 +52,10 @@
             </li>
         @endif
     @endforeach
-
-    <div class="layui-flow-more">
-        <li class="layim-msgbox-tips">暂无更多新消息</li>
-    </div>
 </ul>
+<div style="text-align:center">
+    {!! $list->links() !!}
+</div>
 <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="/asset/layui/layui.js"></script>
 <script>
@@ -99,13 +99,15 @@
                     dataType:"json",
                     success:function (res) {
                         console.log(res)
-                        console.log(res.code)
                         //执行添加好友操作
                         if (res.code == 200){
                             uid = obj.parents('li').attr('data-uid');
                             fromgroup = obj.parents('li').attr('data-fromgroup');
+                            console.log(uid)
+                            console.log(fromgroup)
                             parent.sendMessage(parent.socket, JSON.stringify({type:"addList",id:uid,fromgroup:fromgroup}))//通知对方，我已同意，把我加入到对方好友列表并添加消息提醒
                             parent.layui.layim.addList(res.data); //将刚通过的好友追加到好友列表
+                            obj.parent().html('<span>已同意</span>');
                         } else {
                             layer.msg(res.msg,function(){});
                         }

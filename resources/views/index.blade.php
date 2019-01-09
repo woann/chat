@@ -3,9 +3,20 @@
 <head>
     <meta charset="utf-8">
     <title>woann-chat</title>
-    <link rel="stylesheet" href="/asset/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/asset/layui/css/layuiv2.css" media="all">
 </head>
 <body>
+<ul class="layui-nav" >
+    <li class="layui-nav-item" style="float: right;">
+        <a href="javascript:;"><img src="{{ session('user')->avatar }}" class="layui-nav-img">{{ session('user')->username }}</a>
+        <dl class="layui-nav-child">
+            <dd><a href="/loginout">退出登录</a></dd>
+        </dl>
+    </li>
+    <li class="layui-nav-item layui-this"><a href="/">首页</a></li>
+    <li class="layui-nav-item"><a href="https://www.woann.cn">吴先生的博客</a></li>
+    <li class="layui-nav-item"><a href="https://github.com/woann">Github</a></li>
+</ul>
 <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="/asset/layui/layui.js"></script>
 <script>
@@ -16,7 +27,9 @@
             console.log("连接状态码："+readyState);
             socket.send(data)
         }
-
+        layui.use('element', function(){
+            var element = layui.element;
+        });
         layui.use('layim', function(layim){
             //基础配置
             layim.config({

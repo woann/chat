@@ -84,7 +84,7 @@
                             window.location = "/";
                         },1500);
                     }else{
-                        layer.msg(data.msg,function(){});
+                        layer.msg(res.msg,function(){});
                     }
                 }
             })

@@ -83,6 +83,7 @@ class UserController extends Controller
         if (!$res) {
             return $this->json(500,'添加失败');
         }
+        DB::table('system_message')->where('id',$id)->update(['status' => 1]);
         $user = DB::table('user')->find($system_message->from_id);
         $data = [
             "type"  => "friend",

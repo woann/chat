@@ -148,13 +148,17 @@ class IndexController extends Controller
             ->select('sm.id','f.id as uid','f.avatar','f.nickname','sm.remark','sm.time','sm.type','sm.group_id','sm.status')
             ->where('user_id',$session->user_id)
             ->orderBy('id', 'DESC')
-            ->get();
+            ->paginate(10);
         foreach ($list as $k => $v) {
             $list[$k]->time = time_tranx($v->time);
         }
         return view('message_box',['list' => $list]);
     }
-
+    public function loginOut()
+    {
+        session(['user'=>null]);
+        return redirect('/');
+    }
     public function chatLog()
     {
         return view('chat_log');
