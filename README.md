@@ -1,4 +1,4 @@
-> `woann-chat`是一个基于laravelS和layim编写的聊天系统。
+> `woann-chat`是一个基于LaravelS和Layim编写的聊天系统。
 
 项目地址：[https://github.com/woann/chat](https://github.com/woann/chat)
 
@@ -18,8 +18,8 @@
 * 导入sql，项目根目录下有个`woann_chat.sql`文件，将该sql文件导入数据库即可
 * 修改`.env`文件，按照你的数据库账号密码进行配置
 * 运行laravelS `php bin/laravels start`
-* 此时访问`127.0.0.1:9501`即可进入登录页面（默认账号:`woann`,密码:`wqg951122`）
-
+* 此时访问`127.0.0.1:9501`即可进入登录页面
+* 测试账号 默认账号:`woann`,密码:`wqg951122`,其他测试账号：`test01` - `test04` 密码全是`123456`，当然你也可以自行注册。
 ## 部分截图
 * 主界面
 ![image.png](https://upload-images.jianshu.io/upload_images/9160823-0a98529381fb35be.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
