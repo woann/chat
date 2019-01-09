@@ -23,7 +23,7 @@
 
 ## 配合nginx使用
 * nginx配置文件
-```
+```nginx
 map $http_upgrade $connection_upgrade {
     default upgrade;
     ''      close;
@@ -95,11 +95,11 @@ server {
 }
 ```
 * 将`resources/view/index.blade.php`文件中简历websocket中的
-```
+```javascript
 socket = new WebSocket('ws://127.0.0.1:9501?sessionid={{ $sessionid }}');
 ```
 替换成
-```
+```javascript
 socket = new WebSocket('ws://xxx.com/ws?sessionid={{ $sessionid }}');
 ```
 
