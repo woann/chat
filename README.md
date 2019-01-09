@@ -30,10 +30,18 @@
 * 主界面
 ![image.png](https://upload-images.jianshu.io/upload_images/9160823-0a98529381fb35be.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
+* 收到消息
+![image.png](https://upload-images.jianshu.io/upload_images/9160823-c94eabb2198f88c9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+* 聊天界面
+![image.png](https://upload-images.jianshu.io/upload_images/9160823-bac8b54de33b0677.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 * 添加好友
 ![image.png](https://upload-images.jianshu.io/upload_images/9160823-437b3e463d54bdc2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 * 加入群
 ![image.png](https://upload-images.jianshu.io/upload_images/9160823-52f2c910912ee606.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 * 同意添加
 ![image.png](https://upload-images.jianshu.io/upload_images/9160823-f1b7f520e1d03a7b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
