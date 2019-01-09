@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主机： localhost
--- 生成日期： 2019-01-08 17:09:53
+-- 生成日期： 2019-01-09 14:59:09
 -- 服务器版本： 5.5.60-log
 -- PHP 版本： 7.2.6
 
@@ -40,10 +40,14 @@ CREATE TABLE `c_friend` (
 --
 
 INSERT INTO `c_friend` (`id`, `user_id`, `friend_id`, `friend_group_id`) VALUES
-(2, 10001, 10002, 1),
-(4, 10003, 10002, 2),
-(30, 10003, 10001, 2),
-(31, 10001, 10003, 1);
+(46, 10001, 10008, 3),
+(47, 10008, 10001, 7),
+(52, 10001, 10005, 3),
+(53, 10005, 10001, 4),
+(54, 10001, 10006, 3),
+(55, 10006, 10001, 5),
+(66, 10001, 10007, 3),
+(67, 10007, 10001, 6);
 
 -- --------------------------------------------------------
 
@@ -62,8 +66,11 @@ CREATE TABLE `c_friend_group` (
 --
 
 INSERT INTO `c_friend_group` (`id`, `user_id`, `groupname`) VALUES
-(1, 10001, '默认分组'),
-(2, 10003, '测试分组');
+(3, 10001, '默认分组'),
+(4, 10005, '默认分组'),
+(5, 10006, '默认分组'),
+(6, 10007, '默认分组'),
+(7, 10008, '默认分组');
 
 -- --------------------------------------------------------
 
@@ -83,14 +90,9 @@ CREATE TABLE `c_group` (
 --
 
 INSERT INTO `c_group` (`id`, `user_id`, `groupname`, `avatar`) VALUES
-(10000, 10001, 'php交流群', 'https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=4049759186,3681816205&fm=58&bpow=353&bpoh=373'),
-(10001, 10001, '娱乐', 'uploads/avatar/20190108/5c3441bd6d03e.jpeg'),
-(10002, 10001, '123', 'uploads/avatar/20190108/5c34420450b18.png'),
-(10003, 10001, '213', 'uploads/avatar/20190108/5c344215e166a.png'),
-(10004, 10001, 'asd', 'uploads/avatar/20190108/5c3444490c21c.png'),
-(10005, 10001, 'asd', 'uploads/avatar/20190108/5c3444490c21c.png'),
-(10006, 10001, '12', 'uploads/avatar/20190108/5c3444f362882.png'),
-(10007, 10001, '2233333333333', 'uploads/avatar/20190108/5c34454047cb1.png');
+(10008, 10001, 'PHP交流群', 'uploads/avatar/20190109/5c358bcaa77e3.jpeg'),
+(10009, 10006, '屌丝集中营', 'uploads/avatar/20190109/5c358c05aa1cc.jpg'),
+(10010, 10007, '萌宠', 'uploads/avatar/20190109/5c358c35a8043.jpg');
 
 -- --------------------------------------------------------
 
@@ -109,16 +111,19 @@ CREATE TABLE `c_group_member` (
 --
 
 INSERT INTO `c_group_member` (`id`, `group_id`, `user_id`) VALUES
-(4, 10000, 10002),
-(5, 10000, 10003),
-(7, 10000, 10001),
-(8, 10001, 10001),
-(9, 10002, 10001),
-(10, 10003, 10001),
-(11, 10004, 10001),
-(12, 10005, 10001),
-(13, 10006, 10001),
-(14, 10007, 10001);
+(17, 10008, 10001),
+(18, 10009, 10006),
+(19, 10010, 10007),
+(20, 10009, 10007),
+(21, 10008, 10007),
+(22, 10008, 10005),
+(23, 10009, 10005),
+(24, 10010, 10005),
+(25, 10009, 10001),
+(26, 10010, 10001),
+(27, 10008, 10008),
+(28, 10009, 10008),
+(29, 10010, 10008);
 
 -- --------------------------------------------------------
 
@@ -130,10 +135,27 @@ CREATE TABLE `c_system_message` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL COMMENT '接收用户id',
   `from_id` int(11) NOT NULL COMMENT '来源相关用户id',
-  `remark` varchar(255) NOT NULL COMMENT '添加好友附言',
-  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0未处理 1已处理 用来判断显示同意拒绝按钮',
-  `read` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0未读 1已读，用来显示消息盒子数量'
+  `group_id` int(11) NOT NULL DEFAULT '0',
+  `remark` varchar(255) NOT NULL DEFAULT '' COMMENT '添加好友附言',
+  `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0好友请求 1请求结果通知',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0未处理 1同意 2拒绝',
+  `read` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0未读 1已读，用来显示消息盒子数量',
+  `time` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统消息表';
+
+--
+-- 转存表中的数据 `c_system_message`
+--
+
+INSERT INTO `c_system_message` (`id`, `user_id`, `from_id`, `group_id`, `remark`, `type`, `status`, `read`, `time`) VALUES
+(33, 10001, 10008, 7, '', 0, 1, 1, 1547013257),
+(34, 10008, 10001, 0, '', 1, 1, 1, 1547013357),
+(37, 10001, 10005, 4, '', 0, 1, 1, 1547013795),
+(38, 10005, 10001, 0, '', 1, 1, 0, 1547013800),
+(39, 10001, 10006, 5, '', 0, 1, 1, 1547013821),
+(40, 10006, 10001, 0, '', 1, 1, 0, 1547013826),
+(51, 10001, 10007, 6, '', 0, 1, 1, 1547016259),
+(52, 10007, 10001, 0, '', 1, 1, 1, 1547016263);
 
 -- --------------------------------------------------------
 
@@ -148,7 +170,7 @@ CREATE TABLE `c_user` (
   `username` varchar(255) NOT NULL COMMENT '用户名',
   `password` varchar(255) NOT NULL,
   `sign` varchar(255) NOT NULL COMMENT '签名',
-  `status` varchar(255) NOT NULL DEFAULT 'hide' COMMENT 'online在线 hide隐身 offline离线'
+  `status` varchar(255) NOT NULL DEFAULT 'online' COMMENT 'online在线 hide隐身 offline离线'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户表';
 
 --
@@ -156,9 +178,11 @@ CREATE TABLE `c_user` (
 --
 
 INSERT INTO `c_user` (`id`, `avatar`, `nickname`, `username`, `password`, `sign`, `status`) VALUES
-(10001, 'https://avatars3.githubusercontent.com/u/25681022?s=460&v=4', 'woann', 'woann', '$2y$10$GXL4bjaaD2CwRZE40rA54.Mj/q0w7.PuM6BzZoM914D4GVvD/X7m.', 'PHP is the best language in the world', 'offline'),
-(10002, 'https://iocaffcdn.phphub.org/uploads/avatars/24116_1544858599.jpg!/both/100x100', '哈哈哈', 'asd', '$2y$10$M3cWs2latiKEMKrSwhNLFeo7sepKzq3CYW9RbFS90iUbj10S6ikOC', '', 'offline'),
-(10003, 'uploads/avatar/20190107/5c330024b9bf5.jpg', 'test1', 'test', '$2y$10$GAH4HFWW0/LW9xmRTgEVie24mvMqWplOae2Fc5iITAVZGP5KMy2f6', 'asd', 'offline');
+(10001, 'uploads/avatar/20190109/5c3587fb5da9e.jpeg', 'woann', 'woann', '$2y$10$9Jo4A0nxzH8sLckJzIW9v.6wf4/ZizPs2rshK3.VUIOday1BEEj/y', 'php是世界上最好的语言', 'offline'),
+(10005, 'uploads/avatar/20190109/5c358aa30d122.jpg', '苦逼程序员', 'test01', '$2y$10$DGjWpUFuBU/SnBFG3w6IHOHyV94OP2bgjTNJmgrvka2ieR9lOAi72', '我是旋涡鸣人', 'offline'),
+(10006, 'uploads/avatar/20190109/5c358ae10c4d0.jpeg', '狗der产品', 'test02', '$2y$10$uQJ.ShZMJ2MHsVVVmauzluFsImWuszMS963XUEE/u7C8xRPZMfm1S', '有钱真的可以为所欲为', 'offline'),
+(10007, 'uploads/avatar/20190109/5c358b05874c2.jpg', '服务架构师', 'test03', '$2y$10$RYwAgHBdfXqaE8nLo3scq.HB9vnxHhYI2P8f3aaNh0CSdykdmFuVq', '技术流就是我', 'online'),
+(10008, 'uploads/avatar/20190109/5c358b4b578e1.jpg', '前端攻城狮', 'test04', '$2y$10$5QgXxaoDVkERj5pJA8B81e4ByORwSZQ8ABZRqGue0sHOatzUFtLN6', '前端好苦逼', 'offline');
 
 --
 -- 转储表的索引
@@ -208,37 +232,37 @@ ALTER TABLE `c_user`
 -- 使用表AUTO_INCREMENT `c_friend`
 --
 ALTER TABLE `c_friend`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
 
 --
 -- 使用表AUTO_INCREMENT `c_friend_group`
 --
 ALTER TABLE `c_friend_group`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- 使用表AUTO_INCREMENT `c_group`
 --
 ALTER TABLE `c_group`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10008;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10011;
 
 --
 -- 使用表AUTO_INCREMENT `c_group_member`
 --
 ALTER TABLE `c_group_member`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- 使用表AUTO_INCREMENT `c_system_message`
 --
 ALTER TABLE `c_system_message`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
 
 --
 -- 使用表AUTO_INCREMENT `c_user`
 --
 ALTER TABLE `c_user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10000;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10009;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
