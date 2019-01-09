@@ -28,11 +28,13 @@
 
 
 ![image.png](https://upload-images.jianshu.io/upload_images/9160823-55c8e11c54a45cb4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 * 群聊
 ![image.png](https://upload-images.jianshu.io/upload_images/9160823-337160b3880bc1d0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+* 消息盒子
+![image.png](https://upload-images.jianshu.io/upload_images/9160823-4c4f8f1f71fb37de.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 * 聊天记录 （待开发）
 ![image.png](https://upload-images.jianshu.io/upload_images/9160823-070885583c4dcbb5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-
-* 消息盒子（待开发）
-![image.png](https://upload-images.jianshu.io/upload_images/9160823-4c4f8f1f71fb37de.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
