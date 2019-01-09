@@ -80,9 +80,10 @@ class IndexController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      * @des首页
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('index');
+        $sessionid = $request->session()->getId();
+        return view('index',['sessionid' => $sessionid]);
     }
 
     /**

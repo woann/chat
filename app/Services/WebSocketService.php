@@ -36,13 +36,24 @@ class WebSocketService implements WebSocketHandlerInterface
      */
     public function onOpen(\swoole_websocket_server $server, \swoole_http_request $request)
     {
-        //判断session是否为空
-        $session = session('user');
+        //判断是否传递了sessionid参数
+        if(!isset($request->get["sessionid"])){
+            $data = [
+                "type" => "token expire"
+            ];
+            $server->push($request->fd, json_encode($data));
+            return;
+        }
+        $sessionid = $request->get["sessionid"];//获取sessionid
+        session()->setId($sessionid);//赋值sessionid
+        session()->start();//开启session
+        $session = session('user');//获取session中信息
         if($session == null){
             $data = [
                 "type" => "token expire"
             ];
             $server->push($request->fd, json_encode($data));
+            return;
         }
         //给好友发送上线通知，用来标记头像去除置灰
         $friend_list = DB::table('friend')->where('user_id',$session->user_id)->get();
@@ -81,6 +92,9 @@ class WebSocketService implements WebSocketHandlerInterface
                 "type" => "token_expire"
             ];
             $server->push($frame->fd, json_encode($data));
+        }
+        if (!isset($info->type)) {
+            return;
         }
         //根据type字段判断消息类型并执行对应操作
         switch ($info->type) {

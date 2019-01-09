@@ -66,7 +66,7 @@
             });
             //监听自定义工具栏点击，以添加代码为例
             //建立websocket连接
-            socket = new WebSocket('ws://127.0.0.1:9501');
+            socket = new WebSocket('ws://127.0.0.1:9501?sessionid={{ $sessionid }}');
             socket.onopen = function(){
                 console.log("websocket is connected")
                 ping = setInterval(function () {
