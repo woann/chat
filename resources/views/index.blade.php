@@ -52,20 +52,8 @@
                 ,chatLog: '/chat_log' //聊天记录页面地址，若不开启，剔除该项即可
             });
             //监听自定义工具栏点击，以添加代码为例
-            layim.on('tool(code)', function(insert, send, obj){ //事件中的tool为固定字符，而code则为过滤器，对应的是工具别名（alias）
-                layer.prompt({
-                    title: '插入代码'
-                    ,formType: 2
-                    ,shade: 0
-                }, function(text, index){
-                    layer.close(index);
-                    insert('[pre class=layui-code]' + text + '[/pre]'); //将内容插入到编辑器，主要由insert完成
-                    //send(); //自动发送
-                });
-            });
             //建立websocket连接
             socket = new WebSocket('ws://127.0.0.1:9501');
-            //连接成功时触发
             socket.onopen = function(){
                 console.log("websocket is connected")
                 ping = setInterval(function () {
@@ -73,16 +61,6 @@
                     console.log("ping...");
                 },1000 * 10)
             };
-
-            layim.on('sendMessage', function(res){
-                var mine = res.mine; //包含我发送的消息及我的信息
-                var to = res.to; //对方的信息
-                sendMessage(socket,JSON.stringify({
-                    type: 'chatMessage' //随便定义，用于在服务端区分消息类型
-                    ,data: res
-                }));
-            });
-
             socket.onmessage = function(res){
                 console.log('接收到数据'+ res.data);
                 data = JSON.parse(res.data);
@@ -124,6 +102,45 @@
                 console.log("websocket is closed")
                 clearInterval(ping)
             }
+            layim.on('sendMessage', function(res){
+                var mine = res.mine; //包含我发送的消息及我的信息
+                var to = res.to; //对方的信息
+                sendMessage(socket,JSON.stringify({
+                    type: 'chatMessage' //随便定义，用于在服务端区分消息类型
+                    ,data: res
+                }));
+            });
+            layim.on('sign', function(value){
+                console.log(value); //获得新的签名
+                $.ajax({
+                    url:"/update_sign",
+                    type:"post",
+                    data:{sign:value},
+                    dataType:"json",
+                    success:function (res) {
+                        if(res.code == 200){
+                            layer.msg(res.msg)
+                        }else{
+                            layer.msg(res.msg,function () {})
+                        }
+                    },
+                    error:function () {
+                        layer.msg("网络繁忙",function(){});
+                    }
+                })
+            });
+            layim.on('tool(code)', function(insert, send, obj){ //事件中的tool为固定字符，而code则为过滤器，对应的是工具别名（alias）
+                layer.prompt({
+                    title: '插入代码'
+                    ,formType: 2
+                    ,shade: 0
+                }, function(text, index){
+                    layer.close(index);
+                    insert('[pre class=layui-code]' + text + '[/pre]'); //将内容插入到编辑器，主要由insert完成
+                    //send(); //自动发送
+                });
+            });
+
         });
 
 </script>

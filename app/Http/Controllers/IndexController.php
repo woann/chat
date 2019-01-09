@@ -59,10 +59,15 @@ class IndexController extends Controller
                 'password' => password_hash($post['password'], PASSWORD_DEFAULT),
                 'sign' => $post['sign'],
             ];
-            $res = DB::table('user')->insert($data);
-            if (!$res) {
+            $user_id = DB::table('user')->insertGetId($data);
+            if (!$user_id) {
                 return $this->json(500,'注册失败');
             }
+            //为用户创建默认分组
+            DB::table('friend_group')->insert([
+                'user_id' => $user_id,
+                'groupname' => '默认分组'
+            ]);
             return $this->json(200,'注册成功');
         } else {
             $code_hash = uniqid().uniqid();
@@ -142,6 +147,7 @@ class IndexController extends Controller
             ->leftJoin('user as f','f.id','=','sm.from_id')
             ->select('sm.id','f.id as uid','f.avatar','f.nickname','sm.remark','sm.time','sm.type','sm.group_id','sm.status')
             ->where('user_id',$session->user_id)
+            ->orderBy('id', 'DESC')
             ->get();
         foreach ($list as $k => $v) {
             $list[$k]->time = time_tranx($v->time);

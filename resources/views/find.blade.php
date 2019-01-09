@@ -25,7 +25,7 @@
                 </div>
                 <div class="layui-row">
                     @foreach($user_list as $k=>$v)
-                        <div class="layui-col-md4">
+                        <div class="layui-col-md4" style="border-bottom: 1px solid #f6f6f6">
                         <div class="layui-card">
                             <div class="layui-card-header">{{ $v->nickname }}({{ $v->id }})</div>
                             <div class="layui-card-body">
@@ -41,16 +41,16 @@
             </div>
             <div class="layui-tab-item @if($type == 'group')  layui-show @endif">
                 <div>
-                    <input  style="float: left;width: 75%;" type="text" id="group-wd" required lay-verify="required" placeholder="请输入群Id/群名称" autocomplete="off" class="layui-input" @if($type == 'group') value="{{ $wd }}" @endif>
+                    <input  style="float: left;width: 80%;" type="text" id="group-wd" required lay-verify="required" placeholder="请输入群Id/群名称" autocomplete="off" class="layui-input" @if($type == 'group') value="{{ $wd }}" @endif>
                     <button onclick="createGroup()" style="float: right;width: 10%"  class="layui-btn layui-btn-warm">
                         <i class="layui-icon">&#xe654;</i> 创建群
                     </button>
-                    <button onclick="findGroup()" style="float: right;width: 10%;margin-right: 10px;"  class="layui-btn">
+                    <button onclick="findGroup()" style="float: left;width: 10%;margin-left: 0"  class="layui-btn">
                         <i class="layui-icon">&#xe615;</i> 查找群
                     </button>
                 </div>
                 @foreach($group_list as $k=>$v)
-                    <div class="layui-col-md4">
+                    <div class="layui-col-md4" style="border-bottom: 1px solid #f6f6f6">
                         <div class="layui-card">
                             <div class="layui-card-header">{{ $v->groupname }}({{ $v->id }})</div>
                             <div class="layui-card-body">

@@ -23,6 +23,7 @@ Route::group(['middleware'=>'login'], function () use($router) {
     $router->get('/create_group',['uses' => 'GroupController@createGroup']);
     $router->post('/create_group',['uses' => 'GroupController@createGroup']);
     $router->post('/refuse_friend',['uses' => 'UserController@refuseFriend']);
+    $router->post('/update_sign',['uses' => 'UserController@updateSign']);
 
 });
 $router->get('/login',['uses' => 'IndexController@login']);

@@ -934,8 +934,13 @@ layui.define(["layer", "laytpl", "upload"],
                     })
                 },
                 about: function() {
-                    t.alert("版本： " + a + '<br>版权所有：<a href="http://layim.layui.com" target="_blank">layim.layui.com</a>', {
-                        title: "关于 LayIM",
+                    t.alert("版本： " + a +
+                        '<br>前端版权所有：<a href="http://layim.layui.com" target="_blank">layim.layui.com</a>'+
+                        '<br>后端技术支持：LaravelS'+
+                        '<br>作者：woann <304550409@qq.com>'+
+                        '<br>项目地址：<a href="https://github.com/woann/chat">https://github.com/woann/chat</a>'+
+                        '<br>声明：<span style="color:red;">此项目仅供学习交流，请勿用作商业用途</span>', {
+                        title: "关于 woann-chat",
                         shade: !1
                     })
                 },

@@ -126,4 +126,15 @@ class UserController extends Controller
         }
     }
 
+    public function updateSign(Request $request)
+    {
+        $session = session('user');
+        $sign = $request->post('sign');
+        $res = DB::table('user')->where('id', $session->user_id)->update(['sign' => $sign]);
+        if (!$res) {
+            return $this->json(500,'签名修改失败');
+        }
+        return $this->json(200,'签名修改成功');
+    }
+
 }
