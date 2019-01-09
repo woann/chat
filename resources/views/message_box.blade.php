@@ -24,49 +24,99 @@
 </head>
 <body>
 <ul class="layim-msgbox" id="LAY_view">
-    <li data-uid="166488" data-fromgroup="0">
-        <a href="/u/166488/" target="_blank">
-            <img src="//q.qlogo.cn/qqapp/101235792/B704597964F9BD0DB648292D1B09F7E8/100" class="layui-circle layim-msgbox-avatar"></a>
-        <p class="layim-msgbox-user">
-            <a href="/u/166488/" target="_blank">李彦宏</a>
-            <span>刚刚</span></p>
-        <p class="layim-msgbox-content">申请添加你为好友
-            <span>附言: 有问题要问</span></p>
-        <p class="layim-msgbox-btn">
-            <button class="layui-btn layui-btn-small" data-type="agree">同意</button>
-            <button class="layui-btn layui-btn-small layui-btn-primary" data-type="refuse">拒绝</button></p>
-    </li>
-    <li data-uid="347592" data-fromgroup="0">
-        <a href="/u/347592/" target="_blank">
-            <img src="//q.qlogo.cn/qqapp/101235792/B78751375E0531675B1272AD994BA875/100" class="layui-circle layim-msgbox-avatar"></a>
-        <p class="layim-msgbox-user">
-            <a href="/u/347592/" target="_blank">麻花疼</a>
-            <span>刚刚</span></p>
-        <p class="layim-msgbox-content">申请添加你为好友
-            <span>附言: 你好啊！</span></p>
-        <p class="layim-msgbox-btn">
-            <button class="layui-btn layui-btn-small" data-type="agree">同意</button>
-            <button class="layui-btn layui-btn-small layui-btn-primary" data-type="refuse">拒绝</button></p>
-    </li>
-    <li class="layim-msgbox-system">
-        <p>
-            <em>系统：</em>雷军 拒绝了你的好友申请
-            <span>10天前</span></p>
-    </li>
-    <li class="layim-msgbox-system">
-        <p>
-            <em>系统：</em>马小云 已经同意你的好友申请
-            <span>10天前</span></p>
-    </li>
-    <li class="layim-msgbox-system">
-        <p>
-            <em>系统：</em>贤心 已经同意你的好友申请
-            <span>10天前</span></p>
-    </li>
+    @foreach($list as $k=>$v)
+        @if($v->type == 0)
+            <li data-uid="{{ $v->uid }}" data-fromgroup="{{ $v->group_id }}">
+                <a href="javascript:;">
+                    <img style="width: 40px;height: 40px" src="{{ $v->avatar }}" class="layui-circle layim-msgbox-avatar"></a>
+                <p class="layim-msgbox-user">
+                    <a href="javascript:;" >{{ $v->nickname }}</a>
+                    <span>{{ $v->time }}</span></p>
+                <p class="layim-msgbox-content">申请添加你为好友
+                    <span>附言: {{ $v->remark }}</span></p>
+                <p class="layim-msgbox-btn">
+                    @if($v->status == 0)
+                    <button class="layui-btn layui-btn-small" onclick="agree({{ $v->id }},$(this),'{{ $v->avatar }}','{{ $v->nickname }}')">同意</button>
+                    <button class="layui-btn layui-btn-small layui-btn-primary" onclick="refuse({{ $v->id }},$(this))">拒绝</button>
+                    @else
+                        <span>已{{ $v->status == 1 ? '同意' : '拒绝' }}</span>
+                    @endif
+                </p>
+            </li>
+        @else
+            <li class="layim-msgbox-system">
+                <p>
+                    <em>系统：</em>{{ $v->nickname }} 已经{{ $v->status == 1 ? '同意' : '拒绝' }}你的好友申请
+                    <span>{{ $v->time }}</span></p>
+            </li>
+        @endif
+    @endforeach
+
     <div class="layui-flow-more">
-        <li class="layim-msgbox-tips">暂无更多新消息</li></div>
+        <li class="layim-msgbox-tips">暂无更多新消息</li>
+    </div>
 </ul>
 <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="/asset/layui/layui.js"></script>
+<script>
+    var layer;
+    layui.use('layer', function(){
+        layer = layui.layer;
+    });
+    function refuse(id,obj) {
+        $.ajax({
+            url : "/refuse_friend",
+            type: "post",
+            data: {id:id},
+            dataType:"json",
+            success:function (res) {
+                if (res.code == 200){
+                    layer.msg(res.msg)
+                    //如果成功了，发出socket消息，通知被拒绝者
+                    obj.parent().html('<span>已拒绝</span>');
+                    parent.sendMessage(parent.socket,JSON.stringify({type:"refuseFriend",id:id}))
+                }else{
+                    layer.msg(res.msg,function(){})
+                }
+            },
+            error: function () {
+                layer.msg("网络繁忙",function(){})
+            }
+        });
+    }
+    function agree(id,obj,avatar,nickname){
+        parent.layui.layim.setFriendGroup({
+            type: 'friend'
+            ,username: nickname //好友昵称，若申请加群，参数为：groupname
+            ,avatar: avatar //头像
+            ,group: parent.layui.layim.cache().friend //获取好友列表数据
+            ,submit: function(group, index){
+                parent.layer.close(index); //关闭改面板
+                $.ajax({
+                    url:"/add_friend",
+                    type:"post",
+                    data:{id:id,groupid:group},
+                    dataType:"json",
+                    success:function (res) {
+                        console.log(res)
+                        console.log(res.code)
+                        //执行添加好友操作
+                        if (res.code == 200){
+                            uid = obj.parents('li').attr('data-uid');
+                            fromgroup = obj.parents('li').attr('data-fromgroup');
+                            parent.sendMessage(parent.socket, JSON.stringify({type:"addList",id:uid,fromgroup:fromgroup}))//通知对方，我已同意，把我加入到对方好友列表并添加消息提醒
+                            parent.layui.layim.addList(res.data); //将刚通过的好友追加到好友列表
+                        } else {
+                            layer.msg(res.msg,function(){});
+                        }
+                    },
+                    error:function () {
+                        layer.msg("网络繁忙",function(){});
+                    }
+                })
+            }
+        });
+    }
+</script>
 </body>
 </html>

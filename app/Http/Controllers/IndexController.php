@@ -136,7 +136,17 @@ class IndexController extends Controller
 
     public function messageBox()
     {
-        return view('message_box');
+        $session = session('user');
+        DB::table('system_message')->where('user_id',$session->user_id)->update(['read' => 1]);
+        $list = DB::table('system_message as sm')
+            ->leftJoin('user as f','f.id','=','sm.from_id')
+            ->select('sm.id','f.id as uid','f.avatar','f.nickname','sm.remark','sm.time','sm.type','sm.group_id','sm.status')
+            ->where('user_id',$session->user_id)
+            ->get();
+        foreach ($list as $k => $v) {
+            $list[$k]->time = time_tranx($v->time);
+        }
+        return view('message_box',['list' => $list]);
     }
 
     public function chatLog()

@@ -19,7 +19,15 @@ class WebSocketService implements WebSocketHandlerInterface
     public function __construct()
     {
     }
-
+    public function sendByUid($server,$uid,$data)
+    {
+        $fd = app('swoole')->wsTable->get('uid:'.$uid);//获取接受者fd
+        if ($fd == false){
+            //这里说明该用户已下线，日后做离线消息用
+            return;
+        }
+        $server->push($fd['value'], json_encode($data));//发送消息
+    }
     /**
      * @author woann<304550409@qq.com>
      * @param \swoole_websocket_server $server
@@ -36,6 +44,23 @@ class WebSocketService implements WebSocketHandlerInterface
             ];
             $server->push($request->fd, json_encode($data));
         }
+        //给好友发送上线通知，用来标记头像去除置灰
+        $friend_list = DB::table('friend')->where('user_id',$session->user_id)->get();
+        $data = [
+            "type"  => "friendStatus",
+            "uid"   => $session->user_id,
+            "status"=> 'online'
+        ];
+        foreach ($friend_list as $k => $v) {
+            $this->sendByUid($server,$v->friend_id,$data);
+        }
+        //获取未读消息盒子数量
+        $count = DB::Table('system_message')->where('user_id',$session->user_id)->where('read',0)->count();
+        $data = [
+            "type"      => "msgBox",
+            "count"     => $count
+        ];
+        $server->push($request->fd, json_encode($data));
         app('swoole')->wsTable->set('uid:' . $session->user_id, ["value"=>$request->fd]);// 绑定uid到fd的映射
         app('swoole')->wsTable->set('fd:' . $request->fd,["value"=>$session->user_id]);// 绑定fd到uid的映射
         DB::table('user')->where('id', $session->user_id)->update(['status' => 'online']);//标记为在线
@@ -77,11 +102,10 @@ class WebSocketService implements WebSocketHandlerInterface
                         'fromid' => $info->data->mine->id,
                         'timestamp' => time()*1000
                     ];
-                    $fd = app('swoole')->wsTable->get('uid:'.$info->data->to->id);
-                    if ($fd == false || $info->data->to->id == $session->user_id) {
+                    if ($info->data->to->id == $session->user_id) {
                         return;
                     }
-                    $server->push($fd['value'], json_encode($data));
+                    $this->sendByUid($server,$info->data->to->id,$data);
                 } elseif ($info->data->to->type == "group") {
                     //群消息
                     $data = [
@@ -101,37 +125,51 @@ class WebSocketService implements WebSocketHandlerInterface
                         ->where('group_id', $info->data->to->id)
                         ->get();
                     foreach ($list as $k => $v) {
-                        $fd = app('swoole')->wsTable->get('uid:'.$v->id);
-                        if ($fd == false || $v->id == $session->user_id) {
+                        if ( $v->id == $session->user_id) {
                             continue;
                         }
-                        $server->push($fd['value'], json_encode($data));
+                        $this->sendByUid($server,$v->id,$data);
                     }
                 }
                 break;
-            //添加好友
+            //发送好友请求
             case "addFriend":
                 $friend_id = $info->to_user_id;
-                $user = DB::table('user')->find($session->user_id);
+                $system_message_data = [
+                    'user_id'   => $friend_id,//接受者
+                    'from_id'   => $session->user_id,//来源者
+                    'remark'    => $info->remark,
+                    'type'      => 0,
+                    'group_id'  => $info->to_friend_group_id,
+                    'time'      => time()
+                ];
+                $isFriend = DB::table('friend')->where('friend_id',$friend_id)->where('user_id',$session->user_id)->first();
+                if ($isFriend) {
+                    $data = [
+                        'type' => 'layer',
+                        'code' => 500,
+                        'msg'   => '对方已经是你的好友，不可重复添加'
+                    ];
+                    $this->sendByUid($server,$session->user_id,$data);
+                    return;
+                }
+                if ($friend_id == $session->user_id){
+                    $data = [
+                        'type' => 'layer',
+                        'code' => 500,
+                        'msg'   => '不能添加自己为好友'
+                    ];
+                    $this->sendByUid($server,$session->user_id,$data);
+                    return;
+                }
+                DB::table('system_message')->insert($system_message_data);
+                //获取该接受者未读消息数量
+                $count = DB::Table('system_message')->where('user_id',$friend_id)->where('read',0)->count();
                 $data = [
-                    "type" => "addFriend",
-                    "data" => [
-                        "type"  => "friend",
-                        "avatar"    => $user->avatar,
-                        "username" => $user->nickname,
-                        "groupid" => $info->to_friend_group_id,
-                        "id"        => $user->id,
-                        "sign"    => $user->sign
-                    ]
+                    "type"      => "msgBox",
+                    "count"     => $count
                 ];
-                $data2 = [
-                    'user_id'   => $info->to_user_id,
-                    'from_id'   => $session->userid,
-                    'remark'    =>$info->remark,
-                ];
-                DB::table('system_message')->insert($data2);
-//                $fd = app('swoole')->wsTable->get('uid:'.$friend_id);
-//                $server->push($fd['value'], json_encode($data));
+                $this->sendByUid($server,$friend_id,$data);
                 break;
             //追加好友到好友列表
             case "addList":
@@ -142,13 +180,30 @@ class WebSocketService implements WebSocketHandlerInterface
                         "type"  => "friend",
                         "avatar"    => $user->avatar,
                         "username" => $user->nickname,
-                        "groupid" => $info->groupid,
+                        "groupid" => $info->fromgroup,
                         "id"        => $user->id,
                         "sign"    => $user->sign
                     ]
                 ];
-                $fd = app('swoole')->wsTable->get('uid:'.$info->id);
-                $server->push($fd['value'], json_encode($data));
+                //获取未读消息盒子数量
+                $count = DB::Table('system_message')->where('user_id',$info->id)->where('read',0)->count();
+                $data1 = [
+                    "type"      => "msgBox",
+                    "count"     => $count
+                ];
+                $this->sendByUid($server,$info->id,$data);
+                $this->sendByUid($server,$info->id,$data1);
+                break;
+            case "refuseFriend":
+                $id = $info->id;//消息id
+                $system_message = DB::table('system_message')->find($id);
+                //获取该接受者未读消息数量
+                $count = DB::Table('system_message')->where('user_id',$system_message->from_id)->where('read',0)->count();
+                $data = [
+                    "type"      => "msgBox",
+                    "count"     => $count
+                ];
+                $this->sendByUid($server,$system_message->from_id,$data);
                 break;
             default:
                 break;
@@ -158,6 +213,15 @@ class WebSocketService implements WebSocketHandlerInterface
     {
         // throw new \Exception('an exception');// 此时抛出的异常上层会忽略，并记录到Swoole日志，需要开发者try/catch捕获处理
         $uid = app('swoole')->wsTable->get('fd:' . $fd);
+        $friend_list = DB::table('friend')->where('user_id',$uid['value'])->get();
+        $data = [
+            "type"  => "friendStatus",
+            "uid"   => $uid['value'],
+            "status"=> 'offline'
+        ];
+        foreach ($friend_list as $k => $v) {
+            $this->sendByUid($server,$v->friend_id,$data);
+        }
         if ($uid !== false) {
             app('swoole')->wsTable->del('uid:' . $uid['value']);// 解绑uid映射
         }

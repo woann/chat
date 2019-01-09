@@ -6,11 +6,9 @@
     <link rel="stylesheet" href="/asset/layui/css/layui.css" media="all">
 </head>
 <body>
-<div class="layim-tool-msgbox"></div>
 <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="/asset/layui/layui.js"></script>
 <script>
-    $(function(){
         var socket;
         var ping;
         function sendMessage(socket, data){
@@ -53,7 +51,6 @@
                 ,find: '/find'//发现页面地址，若不开启，剔除该项即可
                 ,chatLog: '/chat_log' //聊天记录页面地址，若不开启，剔除该项即可
             });
-            // layim.msgbox(5);
             //监听自定义工具栏点击，以添加代码为例
             layim.on('tool(code)', function(insert, send, obj){ //事件中的tool为固定字符，而code则为过滤器，对应的是工具别名（alias）
                 layer.prompt({
@@ -87,48 +84,35 @@
             });
 
             socket.onmessage = function(res){
+                console.log('接收到数据'+ res.data);
                 data = JSON.parse(res.data);
-                console.log('接收到数据'+data);
                 switch (data.type) {
                     case "friend":
                     case "group":
                         layim.getMessage(data); //res.data即你发送消息传递的数据（阅读：监听发送的消息）
                         break;
-                    case "addFriend":
-                        layim.setFriendGroup({
-                            type: 'friend'
-                            ,username: data.data.nickname //好友昵称，若申请加群，参数为：groupname
-                            ,avatar: data.data.avatar //头像
-                            ,group: layim.cache().friend //获取好友列表数据
-                            ,submit: function(group, index){
-                                console.log(data.data)
-                                $.ajax({
-                                    url:"/add_friend",
-                                    type:"post",
-                                    data:{from_user_id:data.data.id,from_friend_group_id:group,to_friend_group_id:data.data.groupid},
-                                    dataType:"json",
-                                    success:function (res) {
-                                        //执行添加好友操作
-                                        if (res.code == 200){
-                                            layer.msg(res.msg);
-                                            sendMessage(socket, JSON.stringify({type:"addList",id:data.data.id,groupid:data.data.groupid}))
-                                            data.data.groupid = group;
-                                            layim.addList(data.data); //将刚通过的好友追加到好友列表
-                                        } else {
-                                            layer.msg(res.msg,function(){});
-                                        }
-                                    },
-                                    error:function () {
-                                        layer.msg("网络繁忙",function(){});
-                                    }
-                                })
-                                layer.close(index); //关闭改面板
-                            }
-                        });
+                    case "layer":
+                        if (data.code == 200) {
+                            layer.msg(data.msg)
+                        } else {
+                            layer.msg(data.msg,function(){})
+                        }
                         break;
                     case "addList":
                         console.log(data.data)
                         layim.addList(data.data);
+                        break;
+                    case "friendStatus" :
+                        console.log($('.layim-tool-msgbox').length)
+                        layim.setFriendStatus(data.uid, data.status);
+                        break;
+                    case "msgBox" :
+                        //为了等待页面加载，不然找不到消息盒子图标节点
+                        setTimeout(function(){
+                            if(data.count > 0){
+                                layim.msgbox(data.count);
+                            }
+                        },1000);
                         break;
                     case "token_expire":
                         window.location.reload();
@@ -141,7 +125,6 @@
                 clearInterval(ping)
             }
         });
-    })
 
 </script>
 </body>

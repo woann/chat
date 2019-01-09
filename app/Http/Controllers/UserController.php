@@ -61,29 +61,69 @@ class UserController extends Controller
      */
     public function addFriend(Request $request)
     {
-        $session = session('user');
-        $from_user_id = $request->post('from_user_id');
-        $isFriend = DB::table('friend')->where('user_id',$session->user_id)->where('friend_id',$from_user_id)->first();
+        $id = $request->post('id');
+        $system_message = DB::table('system_message')->find($id);
+        $isFriend = DB::table('friend')->where('user_id',$system_message->user_id)->where('friend_id',$system_message->from_id)->first();
         if ($isFriend) {
             return $this->json(500,'已经是好友了');
         }
         $data = [
             [
-                'user_id' => $session->user_id,
-                'friend_id' =>$from_user_id,
-                'friend_group_id' => $request->post('from_friend_group_id')
+                'user_id' => $system_message->user_id,
+                'friend_id' =>$system_message->from_id,
+                'friend_group_id' => $request->post('groupid')
             ],
             [
-                'user_id' =>$from_user_id,
-                'friend_id' => $session->user_id,
-                'friend_group_id' => $request->post('to_friend_group_id')
+                'user_id' =>$system_message->from_id,
+                'friend_id' => $system_message->user_id,
+                'friend_group_id' => $system_message->group_id
             ]
         ];
         $res = DB::table('friend')->insert($data);
         if (!$res) {
             return $this->json(500,'添加失败');
         }
-        return $this->json(200,'添加成功');
+        $user = DB::table('user')->find($system_message->from_id);
+        $data = [
+            "type"  => "friend",
+            "avatar"    => $user->avatar,
+            "username" => $user->nickname,
+            "groupid" => $request->post('groupid'),
+            "id"        => $user->id,
+            "sign"    => $user->sign
+        ];
+        $system_message_data = [
+            'user_id'   => $system_message->from_id,
+            'from_id'   => $system_message->user_id,
+            'type'      => 1,
+            'status'    => 1,
+            'time'      => time()
+        ];
+        $res1 = DB::table('system_message')->insert($system_message_data);
+        return $this->json(200,'添加成功',$data);
+    }
+
+    public function refuseFriend(Request $request)
+    {
+        $id = $request->post('id');
+        $system_message = DB::table('system_message')->find($id);
+        DB::beginTransaction();
+        $res = DB::table('system_message')->where('id',$id)->update(['status' => 2]);
+        $data = [
+            'user_id'   => $system_message->from_id,
+            'from_id'   => $system_message->user_id,
+            'type'      => 1,
+            'status'    => 2,
+            'time'      => time()
+        ];
+        $res1 = DB::table('system_message')->insert($data);
+        if ($res && $res1){
+            DB::commit();
+            return $this->json(200,"已拒绝");
+        } else {
+            DB::callback();
+            return $this->json(500,"操作失败");
+        }
     }
 
 }
