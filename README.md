@@ -1,11 +1,12 @@
 > `woann-chat`是一个基于laravelS和layim编写的聊天系统。
 
 项目地址：[https://github.com/woann/chat](https://github.com/woann/chat)
+
 | 依赖 | 说明 |
 | -------- | -------- |
 | [PHP](https://secure.php.net/manual/zh/install.php) | `>= 7.2` `推荐7.2` |
 | [Swoole](https://www.swoole.com/) | `>= 4.2.9` `从2.0.12开始不再支持PHP5` `推荐4.2.9+` |
-| [LaravelS](https://github.com/hhxsv5/laravel-s) | `LaravelS是一个将swoole和laravel框架结合起来的胶水工具` |
+| [LaravelS](https://github.com/hhxsv5/laravel-s) | `>=3.3 LaravelS是一个将swoole和laravel框架结合起来的胶水工具` |
 
 ## 声明
 * 此项目是基于LaravelS作为服务端，所以在此之前，你要熟悉swoole、laravel、还有将他们完美结合的`LaravelS`[https://github.com/hhxsv5/laravel-s](https://github.com/hhxsv5/laravel-s)
