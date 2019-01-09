@@ -15,6 +15,7 @@ use DB;
  */
 class WebSocketService implements WebSocketHandlerInterface
 {
+    private $session = null;
     // 声明没有参数的构造函数
     public function __construct()
     {
@@ -48,6 +49,8 @@ class WebSocketService implements WebSocketHandlerInterface
         session()->setId($sessionid);//赋值sessionid
         session()->start();//开启session
         $session = session('user');//获取session中信息
+        $this->session = $session;
+        var_dump($session->nickname);
         if($session == null){
             $data = [
                 "type" => "token expire"
@@ -86,7 +89,8 @@ class WebSocketService implements WebSocketHandlerInterface
     public function onMessage(\swoole_websocket_server $server, \swoole_websocket_frame $frame)
     {
         $info = json_decode($frame->data);//接受收到的数据并转为object
-        $session = session('user');
+        $session = $this->session;
+        var_dump($session);
         if($session == null){
             $data = [
                 "type" => "token_expire"
