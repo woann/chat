@@ -111,7 +111,7 @@ socket = new WebSocket('ws://xxx.com/ws?sessionid={{ $sessionid }}');
 ![image.png](https://upload-images.jianshu.io/upload_images/9160823-c94eabb2198f88c9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 * 聊天界面
-![image.png](https://upload-images.jianshu.io/upload_images/9160823-bac8b54de33b0677.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/9160823-1147cbfa7048bd36.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 * 添加好友
 ![image.png](https://upload-images.jianshu.io/upload_images/9160823-437b3e463d54bdc2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
