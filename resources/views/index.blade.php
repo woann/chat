@@ -80,6 +80,7 @@
                 switch (data.type) {
                     case "friend":
                     case "group":
+                        console.log(data)
                         layim.getMessage(data); //res.data即你发送消息传递的数据（阅读：监听发送的消息）
                         break;
                     case "layer":

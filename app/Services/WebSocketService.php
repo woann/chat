@@ -20,14 +20,22 @@ class WebSocketService implements WebSocketHandlerInterface
     public function __construct()
     {
     }
-    public function sendByUid($server,$uid,$data)
+    public function sendByUid($server,$uid,$data,$offline_msg = false)
     {
         $fd = app('swoole')->wsTable->get('uid:'.$uid);//获取接受者fd
         if ($fd == false){
             //这里说明该用户已下线，日后做离线消息用
-            return;
+            if ($offline_msg) {
+                $data = [
+                    'user_id'   => $uid,
+                    'data'      => json_encode($data),
+                ];
+                //插入离线消息
+                DB::table('offline_message')->insert($data);
+            }
+            return false;
         }
-        $server->push($fd['value'], json_encode($data));//发送消息
+        return $server->push($fd['value'], json_encode($data));//发送消息
     }
     /**
      * @author woann<304550409@qq.com>
@@ -57,6 +65,10 @@ class WebSocketService implements WebSocketHandlerInterface
             $server->push($request->fd, json_encode($data));
             return;
         }
+        //绑定fd变更状态
+        app('swoole')->wsTable->set('uid:' . $session->user_id, ["value"=>$request->fd]);// 绑定uid到fd的映射
+        app('swoole')->wsTable->set('fd:' . $request->fd,["value"=>$session->user_id]);// 绑定fd到uid的映射
+        DB::table('user')->where('id', $session->user_id)->update(['status' => 'online']);//标记为在线
         //给好友发送上线通知，用来标记头像去除置灰
         $friend_list = DB::table('friend')->where('user_id',$session->user_id)->get();
         $data = [
@@ -73,10 +85,17 @@ class WebSocketService implements WebSocketHandlerInterface
             "type"      => "msgBox",
             "count"     => $count
         ];
+        //检查离线消息
+        $offline_messgae = DB::table('offline_message')->where('user_id', $session->user_id)->where('status', 0)->get();
+        foreach ($offline_messgae as $k=>$v) {
+            $res = $this->sendByUid($server,$session->user_id,json_decode($v->data));
+            if ($res) {
+                //如果推送成功标记当前离线消息为已发送
+                DB::table('offline_message')->where('id', $v->id)->update(['status' => 1]);
+            }
+        }
         $server->push($request->fd, json_encode($data));
-        app('swoole')->wsTable->set('uid:' . $session->user_id, ["value"=>$request->fd]);// 绑定uid到fd的映射
-        app('swoole')->wsTable->set('fd:' . $request->fd,["value"=>$session->user_id]);// 绑定fd到uid的映射
-        DB::table('user')->where('id', $session->user_id)->update(['status' => 'online']);//标记为在线
+
     }
 
     /**
@@ -124,7 +143,7 @@ class WebSocketService implements WebSocketHandlerInterface
                     if ($info->data->to->id == $session->user_id) {
                         return;
                     }
-                    $this->sendByUid($server,$info->data->to->id,$data);
+                    $this->sendByUid($server,$info->data->to->id,$data,true);
                     //记录聊天记录
                     $record_data = [
                         'user_id'       => $info->data->mine->id,
@@ -156,7 +175,7 @@ class WebSocketService implements WebSocketHandlerInterface
                         if ( $v->id == $session->user_id) {
                             continue;
                         }
-                        $this->sendByUid($server,$v->id,$data);
+                        $this->sendByUid($server,$v->id,$data,true);
                     }
                     //记录聊天记录
                     $record_data = [
@@ -206,7 +225,7 @@ class WebSocketService implements WebSocketHandlerInterface
                     "type"      => "msgBox",
                     "count"     => $count
                 ];
-                $this->sendByUid($server,$friend_id,$data);
+                $this->sendByUid($server,$friend_id,$data,true);
                 break;
             //追加好友到好友列表
             case "addList":
@@ -229,7 +248,7 @@ class WebSocketService implements WebSocketHandlerInterface
                     "count"     => $count
                 ];
                 $this->sendByUid($server,$info->id,$data);
-                $this->sendByUid($server,$info->id,$data1);
+                $this->sendByUid($server,$info->id,$data1,true);
                 break;
             case "refuseFriend":
                 $id = $info->id;//消息id
