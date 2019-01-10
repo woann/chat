@@ -123,7 +123,7 @@ socket = new WebSocket('ws://xxx.com/ws?sessionid={{ $sessionid }}');
 ![image.png](https://upload-images.jianshu.io/upload_images/9160823-f1b7f520e1d03a7b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 * 群聊
-![image.png](https://upload-images.jianshu.io/upload_images/9160823-28901e6c1ed6f234.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/9160823-8b1796fa1320c3c6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 
 * 消息盒子
@@ -131,4 +131,5 @@ socket = new WebSocket('ws://xxx.com/ws?sessionid={{ $sessionid }}');
 
 
 * 聊天记录
-![](https://upload-images.jianshu.io/upload_images/9160823-16319fd32a85ac96.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/9160823-eef5654fc617536f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
