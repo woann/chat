@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主机： localhost
--- 生成日期： 2019-01-09 14:59:09
+-- 生成日期： 2019-01-10 12:06:03
 -- 服务器版本： 5.5.60-log
 -- PHP 版本： 7.2.6
 
@@ -21,6 +21,62 @@ SET time_zone = "+00:00";
 --
 -- 数据库： `woann_chat`
 --
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `c_chat_record`
+--
+
+CREATE TABLE `c_chat_record` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `friend_id` int(11) NOT NULL DEFAULT '0' COMMENT '是群聊消息记录的话 此id为0',
+  `group_id` int(11) NOT NULL DEFAULT '0' COMMENT '如果不为0说明是群聊',
+  `content` varchar(1000) NOT NULL DEFAULT '',
+  `time` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='聊天记录';
+
+--
+-- 转存表中的数据 `c_chat_record`
+--
+
+INSERT INTO `c_chat_record` (`id`, `user_id`, `friend_id`, `group_id`, `content`, `time`) VALUES
+(1, 10001, 0, 10008, 'asd', 1547087350),
+(2, 10001, 0, 10008, 'face[ok] ', 1547087352),
+(3, 10006, 0, 10008, '23', 1547087461),
+(4, 10001, 10006, 0, '2', 1547087939),
+(5, 10001, 10006, 0, '2', 1547089271),
+(6, 10001, 10006, 0, '3', 1547089271),
+(7, 10001, 10006, 0, '4', 1547089271),
+(8, 10001, 10006, 0, '5', 1547089272),
+(9, 10001, 10006, 0, '6', 1547089272),
+(10, 10001, 10006, 0, '7', 1547089272),
+(11, 10001, 10006, 0, '8', 1547089272),
+(12, 10001, 10006, 0, '8', 1547089273),
+(13, 10001, 10006, 0, '6', 1547089273),
+(14, 10001, 10006, 0, 'e5', 1547089273),
+(15, 10001, 10006, 0, '54', 1547089274),
+(16, 10001, 10006, 0, '54df', 1547089274),
+(17, 10001, 10006, 0, 'g', 1547089274),
+(18, 10001, 10006, 0, 'df', 1547089274),
+(19, 10001, 10006, 0, 'gdf', 1547089275),
+(20, 10001, 10006, 0, 'dfg', 1547089275),
+(21, 10001, 10006, 0, 'f', 1547089275),
+(22, 10001, 10006, 0, 'g', 1547089276),
+(23, 10006, 10001, 0, 'hahah ', 1547089530),
+(24, 10006, 10001, 0, '在啊', 1547089599),
+(25, 10006, 10001, 0, '你好啊', 1547089600),
+(26, 10006, 10001, 0, '你是大佬吗', 1547089604),
+(27, 10001, 10006, 0, '在啊', 1547089610),
+(28, 10001, 10006, 0, '我不是大佬', 1547089613),
+(29, 10001, 10006, 0, '我是菜鸡', 1547089616),
+(30, 10001, 10006, 0, 'face[怒] ', 1547089620),
+(31, 10006, 10001, 0, 'img[uploads/im/20190110/5c36b6da18bea.jpeg]', 1547089626),
+(32, 10001, 10008, 0, '333', 1547090986),
+(33, 10001, 10008, 0, '1', 1547091312),
+(34, 10008, 10005, 0, '4', 1547092511),
+(35, 10008, 10001, 0, 'img[uploads/im/20190110/5c36c27bca2cb.jpeg]', 1547092603);
 
 -- --------------------------------------------------------
 
@@ -47,7 +103,9 @@ INSERT INTO `c_friend` (`id`, `user_id`, `friend_id`, `friend_group_id`) VALUES
 (54, 10001, 10006, 3),
 (55, 10006, 10001, 5),
 (66, 10001, 10007, 3),
-(67, 10007, 10001, 6);
+(67, 10007, 10001, 6),
+(68, 10005, 10008, 4),
+(69, 10008, 10005, 7);
 
 -- --------------------------------------------------------
 
@@ -123,7 +181,29 @@ INSERT INTO `c_group_member` (`id`, `group_id`, `user_id`) VALUES
 (26, 10010, 10001),
 (27, 10008, 10008),
 (28, 10009, 10008),
-(29, 10010, 10008);
+(29, 10010, 10008),
+(30, 10008, 10006);
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `c_offline_message`
+--
+
+CREATE TABLE `c_offline_message` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `data` varchar(1000) NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0未发送 1已发送'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='离线消息表';
+
+--
+-- 转存表中的数据 `c_offline_message`
+--
+
+INSERT INTO `c_offline_message` (`id`, `user_id`, `data`, `status`) VALUES
+(1, 10008, '{\"username\":\"woann(10001)\",\"avatar\":\"uploads\\/avatar\\/20190109\\/5c3587fb5da9e.jpeg\",\"id\":10001,\"type\":\"friend\",\"content\":\"333\",\"cid\":0,\"mine\":false,\"fromid\":10001,\"timestamp\":1547090986000}', 1),
+(2, 10005, '{\"type\":\"msgBox\",\"count\":1}', 1);
 
 -- --------------------------------------------------------
 
@@ -151,11 +231,13 @@ INSERT INTO `c_system_message` (`id`, `user_id`, `from_id`, `group_id`, `remark`
 (33, 10001, 10008, 7, '', 0, 1, 1, 1547013257),
 (34, 10008, 10001, 0, '', 1, 1, 1, 1547013357),
 (37, 10001, 10005, 4, '', 0, 1, 1, 1547013795),
-(38, 10005, 10001, 0, '', 1, 1, 0, 1547013800),
+(38, 10005, 10001, 0, '', 1, 1, 1, 1547013800),
 (39, 10001, 10006, 5, '', 0, 1, 1, 1547013821),
-(40, 10006, 10001, 0, '', 1, 1, 0, 1547013826),
+(40, 10006, 10001, 0, '', 1, 1, 1, 1547013826),
 (51, 10001, 10007, 6, '', 0, 1, 1, 1547016259),
-(52, 10007, 10001, 0, '', 1, 1, 1, 1547016263);
+(52, 10007, 10001, 0, '', 1, 1, 1, 1547016263),
+(53, 10005, 10008, 7, '加我', 0, 1, 1, 1547092067),
+(54, 10008, 10005, 0, '', 1, 1, 1, 1547092167);
 
 -- --------------------------------------------------------
 
@@ -178,15 +260,21 @@ CREATE TABLE `c_user` (
 --
 
 INSERT INTO `c_user` (`id`, `avatar`, `nickname`, `username`, `password`, `sign`, `status`) VALUES
-(10001, 'uploads/avatar/20190109/5c3587fb5da9e.jpeg', 'woann', 'woann', '$2y$10$9Jo4A0nxzH8sLckJzIW9v.6wf4/ZizPs2rshK3.VUIOday1BEEj/y', 'php是世界上最好的语言', 'offline'),
+(10001, 'uploads/avatar/20190109/5c3587fb5da9e.jpeg', 'woann', 'woann', '$2y$10$9Jo4A0nxzH8sLckJzIW9v.6wf4/ZizPs2rshK3.VUIOday1BEEj/y', 'php是世界上最好的语言', 'online'),
 (10005, 'uploads/avatar/20190109/5c358aa30d122.jpg', '苦逼程序员', 'test01', '$2y$10$DGjWpUFuBU/SnBFG3w6IHOHyV94OP2bgjTNJmgrvka2ieR9lOAi72', '我是旋涡鸣人', 'offline'),
 (10006, 'uploads/avatar/20190109/5c358ae10c4d0.jpeg', '狗der产品', 'test02', '$2y$10$uQJ.ShZMJ2MHsVVVmauzluFsImWuszMS963XUEE/u7C8xRPZMfm1S', '有钱真的可以为所欲为', 'offline'),
-(10007, 'uploads/avatar/20190109/5c358b05874c2.jpg', '服务架构师', 'test03', '$2y$10$RYwAgHBdfXqaE8nLo3scq.HB9vnxHhYI2P8f3aaNh0CSdykdmFuVq', '技术流就是我', 'online'),
-(10008, 'uploads/avatar/20190109/5c358b4b578e1.jpg', '前端攻城狮', 'test04', '$2y$10$5QgXxaoDVkERj5pJA8B81e4ByORwSZQ8ABZRqGue0sHOatzUFtLN6', '前端好苦逼', 'offline');
+(10007, 'uploads/avatar/20190109/5c358b05874c2.jpg', '服务架构师', 'test03', '$2y$10$RYwAgHBdfXqaE8nLo3scq.HB9vnxHhYI2P8f3aaNh0CSdykdmFuVq', '技术流就是我', 'offline'),
+(10008, 'uploads/avatar/20190109/5c358b4b578e1.jpg', '前端攻城狮', 'test04', '$2y$10$5QgXxaoDVkERj5pJA8B81e4ByORwSZQ8ABZRqGue0sHOatzUFtLN6', '前端好苦逼', 'online');
 
 --
 -- 转储表的索引
 --
+
+--
+-- 表的索引 `c_chat_record`
+--
+ALTER TABLE `c_chat_record`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- 表的索引 `c_friend`
@@ -213,6 +301,12 @@ ALTER TABLE `c_group_member`
   ADD PRIMARY KEY (`id`);
 
 --
+-- 表的索引 `c_offline_message`
+--
+ALTER TABLE `c_offline_message`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- 表的索引 `c_system_message`
 --
 ALTER TABLE `c_system_message`
@@ -229,10 +323,16 @@ ALTER TABLE `c_user`
 --
 
 --
+-- 使用表AUTO_INCREMENT `c_chat_record`
+--
+ALTER TABLE `c_chat_record`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+
+--
 -- 使用表AUTO_INCREMENT `c_friend`
 --
 ALTER TABLE `c_friend`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
 
 --
 -- 使用表AUTO_INCREMENT `c_friend_group`
@@ -250,13 +350,19 @@ ALTER TABLE `c_group`
 -- 使用表AUTO_INCREMENT `c_group_member`
 --
 ALTER TABLE `c_group_member`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+
+--
+-- 使用表AUTO_INCREMENT `c_offline_message`
+--
+ALTER TABLE `c_offline_message`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- 使用表AUTO_INCREMENT `c_system_message`
 --
 ALTER TABLE `c_system_message`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
 
 --
 -- 使用表AUTO_INCREMENT `c_user`
