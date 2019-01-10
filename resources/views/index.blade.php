@@ -94,7 +94,7 @@
                         layim.addList(data.data);
                         break;
                     case "friendStatus" :
-                        console.log($('.layim-tool-msgbox').length)
+                        console.log(data.status)
                         layim.setFriendStatus(data.uid, data.status);
                         break;
                     case "msgBox" :

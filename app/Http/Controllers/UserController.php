@@ -40,7 +40,7 @@ class UserController extends Controller
         }
         $data = [
             'mine'      => [
-                'username'  => $user->username.'('.$user->id.')',
+                'username'  => $user->nickname.'('.$user->id.')',
                 'id'        => $user->id,
                 'status'    => $user->status,
                 'sign'      => $user->sign,
