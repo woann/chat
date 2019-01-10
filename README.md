@@ -105,7 +105,12 @@ socket = new WebSocket('ws://127.0.0.1:9501?sessionid={{ $sessionid }}');
 socket = new WebSocket('ws://xxx.com/ws?sessionid={{ $sessionid }}');
 ```
 
+## 待完成
+* 后台管理
+* ...
+
 ## 部分截图
+
 * 主界面
 ![image.png](https://upload-images.jianshu.io/upload_images/9160823-0a98529381fb35be.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
