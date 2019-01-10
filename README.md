@@ -2,6 +2,8 @@
 
 项目地址：[https://github.com/woann/chat](https://github.com/woann/chat)
 
+演示地址：[http://chat.woann.cn](http://chat.woann.cn) （测试账号同[安装](https://github.com/woann/chat#%E5%AE%89%E8%A3%85)中的测试账号同步）
+
 | 依赖 | 说明 |
 | -------- | -------- |
 | [PHP](https://secure.php.net/manual/zh/install.php) | `>= 7.2` `推荐7.2` |
@@ -111,7 +113,7 @@ socket = new WebSocket('ws://xxx.com/ws?sessionid={{ $sessionid }}');
 ![image.png](https://upload-images.jianshu.io/upload_images/9160823-c94eabb2198f88c9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 * 聊天界面
-![image.png](https://upload-images.jianshu.io/upload_images/9160823-bac8b54de33b0677.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/9160823-1147cbfa7048bd36.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 * 添加好友
 ![image.png](https://upload-images.jianshu.io/upload_images/9160823-437b3e463d54bdc2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
@@ -123,7 +125,7 @@ socket = new WebSocket('ws://xxx.com/ws?sessionid={{ $sessionid }}');
 ![image.png](https://upload-images.jianshu.io/upload_images/9160823-f1b7f520e1d03a7b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 * 群聊
-![image.png](https://upload-images.jianshu.io/upload_images/9160823-28901e6c1ed6f234.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/9160823-8b1796fa1320c3c6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 
 * 消息盒子
@@ -131,4 +133,5 @@ socket = new WebSocket('ws://xxx.com/ws?sessionid={{ $sessionid }}');
 
 
 * 聊天记录
-![](https://upload-images.jianshu.io/upload_images/9160823-16319fd32a85ac96.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/9160823-eef5654fc617536f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
