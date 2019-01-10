@@ -104,7 +104,6 @@ socket = new WebSocket('ws://xxx.com/ws?sessionid={{ $sessionid }}');
 ```
 
 ## 待完成
-* 聊天记录
 * 离线消息
 * ...
 
@@ -135,5 +134,5 @@ socket = new WebSocket('ws://xxx.com/ws?sessionid={{ $sessionid }}');
 ![image.png](https://upload-images.jianshu.io/upload_images/9160823-12f0e5e20739b12f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 
-* 聊天记录 （待开发）
-![image.png](https://upload-images.jianshu.io/upload_images/9160823-a03c15e7a7776577.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+* 聊天记录
+![](https://upload-images.jianshu.io/upload_images/9160823-16319fd32a85ac96.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
