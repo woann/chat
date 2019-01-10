@@ -4,6 +4,11 @@
     <meta charset="utf-8">
     <title>woann-chat</title>
     <link rel="stylesheet" href="/asset/layui/css/layuiv2.css" media="all">
+    <style>
+        .layui-edge{
+            display: block;
+        }
+    </style>
 </head>
 <body>
 <ul class="layui-nav" >
