@@ -153,6 +153,9 @@
                     //send(); //自动发送
                 });
             });
+            layim.on('chatChange', function(res){
+               console.log(res)
+            });
 
         });
 

@@ -14,51 +14,76 @@
 <body>
 <div class="layim-chat-main">
     <ul id="LAY_view">
-        <li class="layim-chat-mine">
-            <div class="layim-chat-user">
-                <img src="//tva3.sinaimg.cn/crop.0.0.512.512.180/8693225ajw8f2rt20ptykj20e80e8weu.jpg">
-                <cite>
-                    <i>2016-12-05 08:31:22</i>纸飞机</cite>
-            </div>
-            <div class="layim-chat-text">
-                <img alt="[抱抱]" title="[抱抱]" src="https://res.layui.com/layui/src/images/face/25.gif">
-                <img alt="[心]" title="[心]" src="https://res.layui.com/layui/src/images/face/47.gif">你好啊小美女</div></li>
-        <li>
-            <div class="layim-chat-user">
-                <img src="//tva3.sinaimg.cn/crop.0.0.512.512.180/8693225ajw8f2rt20ptykj20e80e8weu.jpg">
-                <cite>Z_子晴
-                    <i>2016-12-05 08:31:32</i>
-                </cite>
-            </div>
-            <div class="layim-chat-text">你没发错吧？
-                <img alt="[微笑]" title="[微笑]" src="https://res.layui.com/layui/src/images/face/0.gif"></div></li>
-        <li>
-            <div class="layim-chat-user">
-                <img src="//tva3.sinaimg.cn/crop.0.0.512.512.180/8693225ajw8f2rt20ptykj20e80e8weu.jpg">
-                <cite>Z_子晴
-                    <i>2016-12-05 08:31:38</i>
-                </cite>
-            </div>
-            <div class="layim-chat-text">你是谁呀亲。。我爱的是贤心！我爱的是贤心！我爱的是贤心！重要的事情要说三遍~</div></li>
-        <li>
-            <div class="layim-chat-user">
-                <img src="//tva3.sinaimg.cn/crop.0.0.512.512.180/8693225ajw8f2rt20ptykj20e80e8weu.jpg">
-                <cite>Z_子晴
-                    <i>2016-12-05 08:31:48</i>
-                </cite>
-            </div>
-            <div class="layim-chat-text">注意：这些都是模拟数据，实际使用时，需将其中的模拟接口改为你的项目真实接口。
-                <br>该模版文件所在目录（相对于layui.js）：
-                <br>/css/modules/layim/html/chatlog.html</div></li>
     </ul>
 </div>
+<div id="LAY_page" style="margin: 0 10px;"></div>
+<textarea title="消息模版" id="LAY_tpl" style="display:none;"><%# layui.each(d.data, function(index, item){
+  if(item.id == parent.layui.layim.cache().mine.id){ %>
+    &lt;li class="layim-chat-mine"&gt;&lt;div class="layim-chat-user"&gt;&lt;img src="<% item.avatar %>"&gt;&lt;cite&gt;&lt;i&gt;<% layui.data.date(item.timestamp) %>&lt;/i&gt;<% item.username %>&lt;/cite&gt;&lt;/div&gt;&lt;div class="layim-chat-text"&gt;<% layui.layim.content(item.content) %>&lt;/div&gt;&lt;/li&gt;
+    <%# } else { %>
+    &lt;li&gt;&lt;div class="layim-chat-user"&gt;&lt;img src="<% item.avatar %>"&gt;&lt;cite&gt;<% item.username %>&lt;i&gt;<% layui.data.date(item.timestamp) %>&lt;/i&gt;&lt;/cite&gt;&lt;/div&gt;&lt;div class="layim-chat-text"&gt;<% layui.layim.content(item.content) %>&lt;/div&gt;&lt;/li&gt;
+    <%# }
+  }); %>
+</textarea>
 <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="/asset/layui/layui.js"></script>
 <script>
-    layui.use(['layim', 'laypage'],
-        function() {
+    layui.use(['layim', 'laytpl','laypage'], function(){
+        var layim = layui.layim
+            ,layer = layui.layer
+            ,laytpl = layui.laytpl
+            ,$ = layui.jquery
+            ,laypage = layui.laypage
+            ,mark = 0;
 
-        });
+        function getData(page = 1){
+            //实际使用时，下述的res一般是通过Ajax获得，而此处仅仅只是演示数据格式
+            $.ajax({
+                url:"/chat_record_data",
+                type:"get",
+                data:{id:"{{ $id }}",type:"{{ $type }}",page:page},
+                dataType:"json",
+                success:function(res){
+                    console.log(res)
+                    if (mark == 0){
+                        laypage({
+                            cont:$('#LAY_page'),
+                            pages:res.data.last_page,//总页数
+                            curr:1,//当前页
+                            groups:5,//连续分页数
+                            jump: function(obj, first){
+                                //得到了当前页，用于向服务端请求对应数据
+                                var curr = obj.curr;
+                                console.log(curr)
+                                getData(curr)
+                            }
+                        })
+                    }
+                    mark = 1;
+                    laytpl.config({
+                        open: '<%',
+                        close: '%>'
+                    });
+                    var html = laytpl(LAY_tpl.value).render({
+                        data: res.data.data
+                    });
+                    $('#LAY_view').html(html);
+
+                },
+                error:function(){
+
+                }
+            })
+        }
+        getData(1);
+
+
+        //开始请求聊天记录
+        var param =  location.search; //获得URL参数。该窗口url会携带会话id和type，他们是你请求聊天记录的重要凭据
+
+
+
+    });
 </script>
 </body>
 </html>

@@ -125,6 +125,15 @@ class WebSocketService implements WebSocketHandlerInterface
                         return;
                     }
                     $this->sendByUid($server,$info->data->to->id,$data);
+                    //记录聊天记录
+                    $record_data = [
+                        'user_id'       => $info->data->mine->id,
+                        'friend_id'     => $info->data->to->id,
+                        'group_id'      => 0,
+                        'content'       => $info->data->mine->content,
+                        'time'    => time()
+                    ];
+                    DB::table('chat_record')->insert($record_data);
                 } elseif ($info->data->to->type == "group") {
                     //群消息
                     $data = [
@@ -149,6 +158,15 @@ class WebSocketService implements WebSocketHandlerInterface
                         }
                         $this->sendByUid($server,$v->id,$data);
                     }
+                    //记录聊天记录
+                    $record_data = [
+                        'user_id'       => $info->data->mine->id,
+                        'friend_id'     => 0,
+                        'group_id'      => $info->data->to->id,
+                        'content'       => $info->data->mine->content,
+                        'time'    => time()
+                    ];
+                    DB::table('chat_record')->insert($record_data);
                 }
                 break;
             //发送好友请求

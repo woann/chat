@@ -25,6 +25,8 @@ Route::group(['middleware'=>'login'], function () use($router) {
     $router->post('/refuse_friend',['uses' => 'UserController@refuseFriend']);
     $router->post('/update_sign',['uses' => 'UserController@updateSign']);
     $router->get('/loginout',['uses' => 'IndexController@loginOut']);
+    $router->get('/chat_record_data',['uses' => 'IndexController@chatRecordData']);
+
 
 });
 $router->get('/login',['uses' => 'IndexController@login']);
