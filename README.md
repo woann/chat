@@ -1,6 +1,7 @@
 > `woann-chat`是一个基于LaravelS和Layim编写的聊天系统。
 
 项目地址：[https://github.com/woann/chat](https://github.com/woann/chat)
+演示地址：[http://chat.woann.cn](http://chat.woann.cn) （测试账号同[安装](https://github.com/woann/chat#%E5%AE%89%E8%A3%85)中的测试账号同步）
 
 | 依赖 | 说明 |
 | -------- | -------- |
