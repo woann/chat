@@ -168,11 +168,11 @@
                     //send(); //自动发送
                 });
             });
-            layim.on('chatChange', function(res){
-                console.log(res)
-                var type = res.data.type;
+            layim.on('chatChange', function(obj){
+                console.log(obj)
+                var type = obj.data.type;
                 if(type === 'friend'){
-                    if(res.data.status == 'online'){
+                    if(obj.data.status == 'online'){
                         layim.setChatStatus('<span style="color:#FF5722;">在线</span>'); //模拟标注好友在线状态
                     }else{
                         layim.setChatStatus('<span style="color:#666;">离线</span>'); //模拟标注好友在线状态
