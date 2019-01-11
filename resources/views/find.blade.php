@@ -113,6 +113,9 @@
                 if(res.code == 200){
                     layer.msg(res.msg)
                     parent.layui.layim.addList(res.data)
+                    //加入群成功，给群内所有在线用户发送入群通知
+                    var joinNotify = {type:"joinNotify","groupid":id}
+                    parent.sendMessage(parent.socket,JSON.stringify(joinNotify));
                 }else{
                     layer.msg(res.msg,function () {})
                 }

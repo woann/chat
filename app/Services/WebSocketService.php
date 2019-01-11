@@ -261,6 +261,22 @@ class WebSocketService implements WebSocketHandlerInterface
                 ];
                 $this->sendByUid($server,$system_message->from_id,$data);
                 break;
+            case "joinNotify":
+                $groupid = $info->groupid;
+                $list = DB::table('group_member')->where('group_id',$groupid)->get();
+                $data = [
+                    "type" => "joinNotify",
+                    "data"  => [
+                        "system"    => true,
+                        "id"        => $groupid,
+                        "type"      => "group",
+                        "content"   => $session->nickname."加入了群聊，欢迎下新人吧～"
+                    ]
+                ];
+                foreach ($list as $k=>$v) {
+                    $this->sendByUid($server,$v->user_id,$data);
+                }
+                break;
             default:
                 break;
         }

@@ -88,6 +88,7 @@
                         console.log(data)
                         layim.getMessage(data); //res.data即你发送消息传递的数据（阅读：监听发送的消息）
                         break;
+                    //单纯的弹出
                     case "layer":
                         if (data.code == 200) {
                             layer.msg(data.msg)
@@ -95,14 +96,17 @@
                             layer.msg(data.msg,function(){})
                         }
                         break;
+                    //将新好友添加到列表
                     case "addList":
                         console.log(data.data)
                         layim.addList(data.data);
                         break;
+                    //好友上下线变更
                     case "friendStatus" :
                         console.log(data.status)
                         layim.setFriendStatus(data.uid, data.status);
                         break;
+                    //消息盒子
                     case "msgBox" :
                         //为了等待页面加载，不然找不到消息盒子图标节点
                         setTimeout(function(){
@@ -111,8 +115,13 @@
                             }
                         },1000);
                         break;
+                    //token过期
                     case "token_expire":
                         window.location.reload();
+                        break;
+                    //加群提醒
+                    case "joinNotify":
+                        layim.getMessage(data.data);
                         break;
 
                 }
@@ -160,7 +169,15 @@
                 });
             });
             layim.on('chatChange', function(res){
-               console.log(res)
+                console.log(res)
+                var type = res.data.type;
+                if(type === 'friend'){
+                    if(res.data.status == 'online'){
+                        layim.setChatStatus('<span style="color:#FF5722;">在线</span>'); //模拟标注好友在线状态
+                    }else{
+                        layim.setChatStatus('<span style="color:#666;">离线</span>'); //模拟标注好友在线状态
+                    }
+                }
             });
 
         });

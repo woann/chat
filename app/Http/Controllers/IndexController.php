@@ -68,6 +68,11 @@ class IndexController extends Controller
                 'user_id' => $user_id,
                 'groupname' => '默认分组'
             ]);
+            //将用户添加到所有人都在群
+            DB::table('group_member')->insert([
+                'user_id' => $user_id,
+                'group_id' => 10001
+            ]);
             return $this->json(200,'注册成功');
         } else {
             $code_hash = uniqid().uniqid();
