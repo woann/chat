@@ -19,8 +19,8 @@
         </dl>
     </li>
     <li class="layui-nav-item layui-this"><a href="/">首页</a></li>
-    <li class="layui-nav-item"><a href="https://www.woann.cn">吴先生的博客</a></li>
-    <li class="layui-nav-item"><a href="https://github.com/woann">Github</a></li>
+    <li class="layui-nav-item"><a target="_blank" href="https://www.woann.cn">吴先生的博客</a></li>
+    <li class="layui-nav-item"><a target="_blank" href="https://github.com/woann">Github</a></li>
 </ul>
 <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="/asset/layui/layui.js"></script>
