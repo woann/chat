@@ -54,6 +54,10 @@ return [
             'prefix_indexes' => true,
             'strict' => true,
             'engine' => null,
+            'options'   => [
+                // 开启持久连接
+                \PDO::ATTR_PERSISTENT => true,
+            ],
         ],
 
         'pgsql' => [
