@@ -1,3 +1,5 @@
+## 之前写着玩的,认证就随便用session了,有精力的同学可以把登录认证部分换成token之类的,现在有时有点bug
+
 > `woann-chat`是一个基于LaravelS和Layim编写的聊天系统。
 
 项目地址：[https://github.com/woann/chat](https://github.com/woann/chat)
