@@ -162,7 +162,7 @@ class WebSocketService implements WebSocketHandlerInterface
                         'type' => $info->data->to->type,
                         'content' => $info->data->mine->content,
                         'cid' => 0,
-                        'mine'=> $session->user_id == $info->data->to->id ? true : false,//要通过判断是否是我自己发的
+                        'mine'=> false,
                         'fromid' => $info->data->mine->id,
                         'timestamp' => time()*1000
                     ];
@@ -299,5 +299,7 @@ class WebSocketService implements WebSocketHandlerInterface
         }
         app('swoole')->wsTable->del('fd:' . $fd);// 解绑fd映射
         DB::table('user')->where('id',$uid)->update(['status' => 'offline']);
+        $res = session(['user'=>null]);//释放session
+        var_dump($res);
     }
 }

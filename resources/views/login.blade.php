@@ -23,11 +23,11 @@
                     <input type="password" style="position:absolute;top:-999px"/>
                     <div class="input_outer">
                         <span class="u_user"></span>
-                        <input name="username" class="text" style="color: #FFFFFF !important" type="text" placeholder="请输入账户" value="test01">
+                        <input name="username" class="text" style="color: #FFFFFF !important" type="text" placeholder="请输入账户" value="">
                     </div>
                     <div class="input_outer">
                         <span class="us_uer"></span>
-                        <input name="password" class="text" style="color: #FFFFFF !important; position:absolute; z-index:100;"value="123456" type="password" placeholder="请输入密码">
+                        <input name="password" class="text" style="color: #FFFFFF !important; position:absolute; z-index:100;"value="" type="password" placeholder="请输入密码">
                     </div>
                     <div class="mb2"><a id = "sub" lay-filter="sub" class="act-but submit" href="javascript:;" style="color: #FFFFFF">登录</a></div>
                 </form>
@@ -41,6 +41,15 @@
 <script src="/asset/login/js/rAF.js"></script>
 <script src="/asset/login/js/demo-1.js"></script>
 </body>
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?6b614cdee352cbb9f55e05ad81084c3a";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
 <script>
     function register() {
         layer.open({
