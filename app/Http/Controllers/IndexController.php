@@ -64,7 +64,7 @@ class IndexController extends Controller
                 return $this->json(500,'注册失败');
             }
             //为用户创建默认分组
-            DB::table('friend_group')->insert([
+            $friend_group_id = DB::table('friend_group')->insertGetId([
                 'user_id' => $user_id,
                 'groupname' => '默认分组'
             ]);
@@ -73,6 +73,20 @@ class IndexController extends Controller
                 'user_id' => $user_id,
                 'group_id' => 10001
             ]);
+            //将用户和我互相添加为好友
+            $friend_data = [
+                [
+                    'user_id'       =>  10001,
+                    'friend_id'     =>  $user_id,
+                    'friend_group'  =>  147
+                ],
+                [
+                    'user_id'       =>  $user_id,
+                    'friend_id'     =>  10001,
+                    'friend_group'  =>  $friend_group_id
+                ],
+            ];
+            DB::table('friend')->insert($friend_data);
             return $this->json(200,'注册成功');
         } else {
             $code_hash = uniqid().uniqid();
