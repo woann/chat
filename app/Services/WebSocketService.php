@@ -163,7 +163,11 @@ class WebSocketService implements WebSocketHandlerInterface
                         'type' => $info->data->to->type,
                         'content' => $info->data->mine->content,
                         'cid' => 0,
+<<<<<<< HEAD
                         'mine'=> false,
+=======
+                        'mine'=> false,//要通过判断是否是我自己发的
+>>>>>>> 5994e73bae83cf982bd2cf0f8e8cdc13806c3ee8
                         'fromid' => $info->data->mine->id,
                         'timestamp' => time()*1000
                     ];

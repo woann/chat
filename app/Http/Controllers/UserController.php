@@ -20,7 +20,6 @@ class UserController extends Controller
         if (!$user) {
             return $this->json(500,"获取用户信息失败");
         }
-        var_dump($user);
         $groups = DB::table('group_member as gm')
             ->leftJoin('group as g','g.id','=','gm.group_id')
             ->select('g.id','g.groupname','g.avatar')
