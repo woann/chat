@@ -19,11 +19,11 @@
             <dd><a href="/loginout">退出登录</a></dd>
         </dl>
     </li>
-    <li style="float: right;">
-        <iframe src="https://ghbtns.com/github-btn.html?user=woann&repo=chat&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
+    <li class="layui-nav-item"  style="float: right;">
+        <iframe src="https://ghbtns.com/github-btn.html?user=woann&repo=chat&type=star&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
     </li>
-    <li style="float: right;">
-        <iframe src="https://ghbtns.com/github-btn.html?user=woann&repo=chat&type=fork&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
+    <li class="layui-nav-item"  style="float: right;">
+        <iframe src="https://ghbtns.com/github-btn.html?user=woann&repo=chat&type=fork&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
     </li>
     <li class="layui-nav-item layui-this"><a href="/">首页</a></li>
     <li class="layui-nav-item"><a target="_blank" href="https://www.woann.cn">吴先生的博客</a></li>

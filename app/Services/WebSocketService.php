@@ -58,6 +58,7 @@ class WebSocketService implements WebSocketHandlerInterface
         session()->start();//开启session
         $session = session('user');//获取session中信息
         $this->sessionid = $sessionid;
+        var_dump($this->sessionid);
         if($session == null){
             $data = [
                 "type" => "token expire"
@@ -111,7 +112,7 @@ class WebSocketService implements WebSocketHandlerInterface
         session()->setId($sessionid);//赋值sessionid
         session()->start();//开启session
         $session = session('user');//获取session中信息
-        if($session == null){
+        if($sessionid == null || $session == null){
             $data = [
                 "type" => "token_expire"
             ];
@@ -299,7 +300,7 @@ class WebSocketService implements WebSocketHandlerInterface
         }
         app('swoole')->wsTable->del('fd:' . $fd);// 解绑fd映射
         DB::table('user')->where('id',$uid)->update(['status' => 'offline']);
-        $res = session(['user'=>null]);//释放session
-        var_dump($res);
+        session(['user'=>null]);//释放session
+        $this->session = null;
     }
 }
