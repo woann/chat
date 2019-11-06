@@ -141,7 +141,6 @@
                     break;
 
             }
-<<<<<<< HEAD
         };
         socket.onclose = function(){
             console.log("websocket is closed")
@@ -165,52 +164,6 @@
                 success:function (res) {
                     if(res.code == 200){
                         layer.msg(res.msg)
-=======
-            layim.on('sendMessage', function(res){
-                var mine = res.mine; //包含我发送的消息及我的信息
-                var to = res.to; //对方的信息
-                sendMessage(socket,JSON.stringify({
-                    type: 'chatMessage' //随便定义，用于在服务端区分消息类型
-                    ,data: res
-                }));
-            });
-            layim.on('sign', function(value){
-                console.log(value); //获得新的签名
-                $.ajax({
-                    url:"/update_sign",
-                    type:"post",
-                    data:{sign:value},
-                    dataType:"json",
-                    success:function (res) {
-                        if(res.code == 200){
-                            layer.msg(res.msg)
-                        }else{
-                            layer.msg(res.msg,function () {})
-                        }
-                    },
-                    error:function () {
-                        layer.msg("网络繁忙",function(){});
-                    }
-                })
-            });
-            layim.on('tool(code)', function(insert, send, obj){ //事件中的tool为固定字符，而code则为过滤器，对应的是工具别名（alias）
-                layer.prompt({
-                    title: '插入代码'
-                    ,formType: 2
-                    ,shade: 0
-                }, function(text, index){
-                    layer.close(index);
-                    insert('[pre class=layui-code]' + text + '[/pre]'); //将内容插入到编辑器，主要由insert完成
-                    //send(); //自动发送
-                });
-            });
-            layim.on('chatChange', function(obj){
-                console.log(obj)
-                var type = obj.data.type;
-                if(type === 'friend'){
-                    if(obj.data.status == 'online'){
-                        layim.setChatStatus('<span style="color:#FF5722;">在线</span>'); //模拟标注好友在线状态
->>>>>>> 5994e73bae83cf982bd2cf0f8e8cdc13806c3ee8
                     }else{
                         layer.msg(res.msg,function () {})
                     }
@@ -242,7 +195,6 @@
                 }
             }
         });
-
     });
 
 </script>
